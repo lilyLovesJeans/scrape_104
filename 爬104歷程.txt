@@ -1,0 +1,124 @@
+<div class="job-list-tag b-content">
+<a class="b-tag--default" target="_blank" title="看更多「月薪32,000~45,000元」工作" href="//www.104.com.tw/jobs/search/?sctp=M&scmin=32000&scmax=45000&jobsource=tag_link">月薪32,000~45,000元</a>
+<span class="b-tag--default">待遇面議</span>
+
+#js-job-content > article:nth-child(10) > div.b-block__left > ul:nth-child(2) > li:nth-child(2) > a
+
+#js-job-content > article:nth-child(10) > div.b-block__left > ul:nth-child(2) > li:nth-child(2) > a
+
+
+<article class="b-block--top-bord job-list-item b-clearfix js-job-item" 
+data-job-no="12990148" 
+data-job-name="[時薪計] 辦公行政助理／工讀生" 
+data-job-ro="2" 
+data-cust-no="130000000124392" 
+data-cust-name="鷺鳴國際股份有限公司" 
+data-indcat="1008003001" 
+data-indcat-desc="工商顧問服務業" 
+data-is-save="0" 
+data-is-apply="0" 
+data-jobsource="2018indexpoc" 
+data-qa-id="jobSeachResult">
+
+
+
+https://www.104.com.tw/jobs/search/?ro=0&jobcat=2002001012&expansionType=area%2Cspec%2Ccom%2Cjob%2Cwf%2Cwktm&area=6001010001&order=14&asc=0&page=1&mode=s&jobsource=2018indexpoc&langFlag=0&langStatus=0&recommendJob=1&hotJob=1
+
+
+<div id="js-job-content">
+
+https://www.104.com.tw/jobs/search/?ro=0&kwop=7&keyword=%E8%A1%8C%E6%94%BF%E5%8A%A9%E7%90%86&expansionType=area%2Cspec%2Ccom%2Cjob%2Cwf%2Cwktm&area=6001001001&order=14&asc=0&page=33&mode=s&jobsource=2018indexpoc&langFlag=0&langStatus=0&recommendJob=1&hotJob=1
+
+
+'https://www.104.com.tw/jobs/search/?ro=0&jobcat=2002001012&\
+            expansionType=area%2Cspec%2Ccom%2Cjob%2Cwf%2Cwktm&area={}&\
+                order=14&asc=0&page={}&mode=s&jobsource=2018indexpoc&langFlag=0&\
+                    langStatus=0&recommendJob=1&hotJob=1'.format( area_Taiwan,page)
+
+data-cust-name
+
+data-job-name
+
+use scrape_104;
+CREATE TABLE 104_for_2002001012 (
+        id INT NOT NULL AUTO_INCREMENT, #自動產生編號
+        area_no varchar(10)  NOT NULL,
+        company_name  varchar(80) NOT NULL,
+        job_name varchar(160) NOT NULL,
+        salary   varchar(160) NOT NULL,
+        PRIMARY KEY(id)
+        );
+
+
+my_scrape104_db = mysql.connector.connect(
+  host="localhost",
+  user="104",
+  password="79979898",
+  database="scrape_104"
+)
+
+
+
+mycursor = my_scrape104_db.cursor()
+
+sql = "INSERT INTO 104_for_2002001012 (area_no, company_name ,job_name, salary) VALUES (%s, %s ,%s, %s)"
+val = ("6001001001", "robinmay總公司_薇恩股份有限公司" ,"採購助理(年後上班)","月薪30,000~35,000元")
+
+mycursor.execute(sql, val)
+
+my_scrape104_db.commit()
+
+print(mycursor.rowcount, "record inserted.")
+
+
+df_to_sql = pd.DataFrame(data)
+
+# Step 2: Create a SQLAlchemy engine to connect to the MySQL database
+mysql__engine = create_engine("mysql+mysqlconnector://104:79979898@localhost/scrape_104")
+
+# Step 3: Convert the Pandas DataFrame to a format for MySQL table insertion
+df3.to_sql('104_for_2002001012', con=mysql__engine, if_exists='append', index=False)
+
+
+
+from sqlalchemy import create_engine
+
+# Step 2: Create a SQLAlchemy engine to connect to the MySQL database
+mysql__engine = create_engine("mysql+mysqlconnector://python_user:79979898@localhost/scrape_104")
+
+# Step 3: Convert the Pandas DataFrame to a format for MySQL table insertion
+df3.to_sql('104_for_2002001012', con=mysql__engine, if_exists='append', index=False)
+
+
+mysql_connect = mysql__engine.connect()
+mysql_connect.close()
+
+
+
+column_names= ['company_name','job_name','salary']
+
+df_duplicated= df3[df3.duplicated(subset=column_names,keep=False)]
+df_duplicated= df3[df3.duplicated(subset=column_names,keep='First')]
+print(df_duplicated)
+
+df3.drop_duplicates(inplace=True)
+
+show processlist;
+ kill 33;
+select user,host from mysql.user;
+grant insert,update on scrape_104.104_for_2002001012 to 'python_user'@'localhost';
+alter user 'python_user'@'localhost'  identified by '79979898';
+SHOW GRANTS FOR  'python_user'@'localhost' ;
+
+select distinct * from 104_for_2002001012;
+
+
+use scrape_104;
+CREATE TABLE 104_area (
+        area_no varchar(10)  NOT NULL,
+        area_name  varchar(20) NOT NULL,
+        city_name varchar(10) NOT NULL,
+        PRIMARY KEY(area_no)
+        );
+
+
