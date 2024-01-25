@@ -1,0 +1,62 @@
+{\rtf1\ansi\ansicpg950\cocoartf2513
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset136 PingFangTC-Regular;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16951\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 spec: 
+\f1 \'aa\'a6
+\f0 104
+\f1 \'c2\'be\'a6\'ec\'a1\'41\'a6\'b3\'a1\'75\'a6\'e6\'ac\'46\'a7\'55\'b2\'7a\'a1\'76\'a5\'7c\'ad\'d3\'a6\'72\'aa\'ba\'a1\'41\'aa\'a6\'a6\'5e\'a8\'d3 \'a6\'73\'a8\'ec \'a6\'db\'a4\'76 Local DB\
+         \'a6\'73 \'a4\'bd\'a5\'71\'a6\'57\'ba\'d9  \'c2\'be\'a6\'ec \'c1\'7e\'b8\'ea\
+\
+\'a6\'40\'a4\'54\'a4\'e4\'b5\'7b\'a6\'a1 ( load_area.py , scrape104.py , area_csv_to_sql.py)\'a1\'41\'bb\'a1\'a9\'fa\'a6\'70\'a4\'55\
+\
+1.  \'a1\'75\'a6\'e6\'ac\'46\'a7\'55\'b2\'7a\'a1\'76\'a5\'7c\'ad\'d3\'a6\'72\'aa\'ba \'ba\'eb\'b7\'c7\'b7\'6a\'af\'c1 \'a1\'41\'b6\'b7\'a4\'c4\'bf\'ef \'a1\'75\'a5\'75\'b7\'6a\'b4\'4d\'c2\'be\'b0\'c8\'a6\'57\'ba\'d9\'a1\'76  (\'b0\'d1\'bc\'c6kwop=1)\
+\
+2.   \'b1\'4e 104\'ba\'f4\'af\'b8\'aa\'ba \'a6\'61\'b0\'cf json \'c0\'c9\'ae\'d7\'a6\'73\'a6\'5e Local\'a1\'41\'bf\'7a\'bf\'ef\'a5\'75\'a6\'b3 Taiwan\'a6\'61\'b0\'cf\'aa\'ba\'b3\'a1\'a5\'f7\'a1\'41\
+      \'a6\'73\'a6\'a8  \'a1\'a7area.txt\'a1\'a8  (load_area.py) \
+      city,des,no\
+     \'a5\'78\'a5\'5f\'a5\'ab,\'a5\'78\'a5\'5f\'a5\'ab\'a4\'a4\'a5\'bf\'b0\'cf,6001001001\
+     \'a5\'78\'a5\'5f\'a5\'ab,\'a5\'78\'a5\'5f\'a5\'ab\'a4\'6a\'a6\'50\'b0\'cf,6001001002\
+     \'a5\'78\'a5\'5f\'a5\'ab,\'a5\'78\'a5\'5f\'a5\'ab\'a4\'a4\'a4\'73\'b0\'cf,6001001003\
+     \'a1\'4b\'a1\'4b\'a1\'4b\'a1\'4b\'a1\'4b\'a1\'4b\'a1\'4b\'a1\'4b\'a1\'4b\'a1\'4b\'a1\'4b\'a1\'4b\'a1\'4b..\
+     \'a1\'4b\'a1\'4b\'a1\'4b\'a1\'4b\'a1\'4b\'a1\'4b\'a1\'4b\'a1\'4b\'a1\'4b\'a1\'4b\'a1\'4b\'a1\'4b\'a1\'4b..\
+\
+3.   \'c5\'aa\'a8\'fa area.txt  \'a8\'cc\'a6\'61\'b0\'cf\'c5\'dc\'bc\'c6 no \'a4\'ce \'ad\'b6\'bc\'c6\'c5\'dc\'bc\'c6 \'ab\'d8\'ba\'63 URL\
+     \'a4\'40\'a6\'b8\'a7\'ec\'a4\'40\'ad\'b6\'a1\'41\'a6\'73 list\
+\
+     \'b1\'4e list \'c2\'e0\'a4\'4a dataframe , \'a8\'c3\'a7\'52\'b0\'a3\'ad\'ab\'c2\'d0\'b8\'ea\'ae\'c6\
+\
+   .  \'b1\'4e dataframe \'c2\'e0\'a6\'73\'a4\'4a mysql \'aa\'ba Local DB (scrape104.py)\
+\
+6.  \'b1\'4e \'a1\'a7area.txt\'a1\'a8 \'c2\'e0\'a4\'4a  mysql \'aa\'ba Local DB  (area_csv_to_sql.py) \
+\
+7.  DBF \'bb\'a1\'a9\'fa\
+\
+    # \'a6\'73\'a9\'f1\'aa\'a6\'a6\'5e\'a8\'d3\'aa\'ba\'b8\'ea\'ae\'c6\
+    use scrape_104;\
+    CREATE TABLE 104_for_AdminAsst (\
+            id INT NOT NULL AUTO_INCREMENT,       #\'a6\'db\'b0\'ca\'b2\'a3\'a5\'cd\'bd\'73\'b8\'b9\
+            area_no varchar(10)  NOT NULL,        #\'a6\'61\'b0\'cf\'bd\'73\'b8\'b9\
+            company_name  varchar(80) NOT NULL,   #\'a4\'bd\'a5\'71\'a6\'57\'ba\'d9\
+            company_type  varchar(80) NOT NULL,   #\'a4\'bd\'a5\'71\'c3\'fe\'a7\'4f\
+            job_name varchar(160) NOT NULL,       #\'c2\'be\'a6\'ec\
+            salary   varchar(160) NOT NULL,       #\'c1\'7e\'b8\'ea\
+            PRIMARY KEY(id)\
+            );\
+    \
+    # \'a6\'73\'a9\'f1\'a6\'61\'b0\'cf\'b8\'ea\'ae\'c6\
+    use scrape_104;\
+    CREATE TABLE 104_area (\
+            area_no varchar(10)  NOT NULL,\
+            area_name  varchar(20) NOT NULL,\
+            city_name varchar(10) NOT NULL,\
+            PRIMARY KEY(area_no)\
+            );\
+    \
+    # \'b7\'73\'bc\'57 \'a8\'cf\'a5\'ce python_user'@'localhost \'a1\'41\'a8\'d1 python \'b5\'7b\'a6\'a1\'a8\'cf\'a5\'ce\'a1\'41\'a5\'48\'ab\'4b\'ba\'ca\'b1\'b1 session\
+    grant select, insert,update on scrape_104.104_for_AdminAsst to 'python_user'@'localhost'; \
+    \
+}

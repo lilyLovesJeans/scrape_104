@@ -5,22 +5,29 @@ Created on Tue Dec 26 14:24:00 2023
 
 @author: lilychiou
 
-搜尋104 行政助厘 職位 jobcat=2002001012
+依地區搜尋104 行政助厘  
 
 """
 
 import requests
-
 from bs4 import BeautifulSoup
-
 import pandas as pd
+import json
 from sqlalchemy import create_engine
-mysql__engine = create_engine("mysql+mysqlconnector://python_user:79979898@localhost/scrape_104")
+
+login_mysql = "login_mysql.json"  # login mysql user, pw ,  db
+with open(login_mysql) as login_mysql:
+    login_mysql = json.load(login_mysql)
+    
+
+engine_string = "mysql+mysqlconnector://{}:{}@localhost/{}".\
+    format(login_mysql['user'], login_mysql['password'] ,login_mysql['database'] )
+mysql__engine = create_engine(engine_string)
 
 
 
 # 以下  讀取 台灣的地區代碼 for 104
-area_txt_file = 'area.txt'
+area_txt_file = "area.txt"
 df2 = pd.read_csv(area_txt_file)
 values=[]  #存 地區 公司名稱 職稱 薪資
     
@@ -31,10 +38,15 @@ for  idx in df2.index :
     page = 1
        
     while page > 0 :
-        url = 'https://www.104.com.tw/jobs/search/?ro=0&jobcat=2002001012&\
-            expansionType=area%2Cspec%2Ccom%2Cjob%2Cwf%2Cwktm&area={}&\
-                order=14&asc=0&page={}&mode=s&jobsource=2018indexpoc&langFlag=0&\
-                    langStatus=0&recommendJob=1&hotJob=1'.format( area_Taiwan,page)
+        url =  'https://www.104.com.tw/jobs/search/?ro=0&kwop=1&\
+            keyword=%22%E8%A1%8C%E6%94%BF%E5%8A%A9%E7%90%86%22&\
+                expansionType=area%2Cspec%2Ccom%2Cjob%2Cwf%2Cwktm&\
+                    area={}&order=12&asc=0&page={}&mode=s&\
+                        jobsource=index_s&langFlag=0&langStatus=0&\
+                            recommendJob=1&hotJob=1'.format( area_Taiwan,page)
+        
+             
+
         print(url)
         print('-'*80)
               
@@ -58,15 +70,21 @@ for  idx in df2.index :
         
         for job in soup2:
             
-            print(des_Taiwan)
-            print(job['data-cust-name'])
-            print(job['data-job-name'])
-            print(job['data-indcat-desc'])
+            print(des_Taiwan)               #地區名稱
+            print(job['data-cust-name'])    #公司名稱
+            print(job['data-job-name'])     #職務名稱
+            print(job['data-indcat-desc'])  #公司類別
             value=[area_Taiwan,\
                    job['data-cust-name'],\
+                   job['data-indcat-desc'],\
                    job['data-job-name']]
     
-            
+            """
+            area_Taiwan :           104_for_AdminAsst(area_no)  
+            job['data-cust-name']:  104_for_AdminAsst(company_name) 
+            job['data-indcat-desc']:104_for_AdminAsst(company_type) 
+            ob['data-job-name']:    104_for_AdminAsst(job_name)
+            """
             
             find_salary_1 = soup2[i].find('div',{'class':'job-list-tag b-content'}).\
                 findAll('span',{'class':'b-tag--default'})
@@ -80,10 +98,9 @@ for  idx in df2.index :
                 for tag in  find_salary_2:
                     tags.append(tag.text)
     
-                #tags = [tag.text for tag in soup2[i].find('div',{'class':'job-list-tag b-content'}).\
-                #        find('a',{'class':'b-tag--default'}) ]  # 舊的寫法 生成式迴圈
-                print(tags[0])
-                value.append(tags[0])
+         
+                print(tags[0])  # 薪資
+                value.append(tags[0])  # 104_for_AdminAsst(salary)
             except:
                 # 找不到薪資待還會出現錯誤 : 'NoneType' object is not iterable
                 tags = []
@@ -93,21 +110,15 @@ for  idx in df2.index :
            
             values.append(value)
 
-# scrape_104_file = 'scrape_104.txt'
-columns_name = ['area_no','company_name','job_name','salary']
+
+columns_name = ['area_no','company_name','company_type','job_name','salary']
 df3 = pd.DataFrame()
 df3 = pd.DataFrame(values,columns = columns_name )
-# df3.to_csv(scrape_104_file,index=False)
 
-
-# scrape_duplicate_file= 'scrape_104_duplicate.txt'
-# column_names= ['company_name','job_name','salary']
-# df_duplicated= df3[df3.duplicated(subset=column_names,keep=False)]
-# df_duplicated.to_csv(scrape_duplicate_file,index=False)
 df3.drop_duplicates(inplace=True)  #刪除重覆資料
 
 
-df3.to_sql('104_for_2002001012', con=mysql__engine, if_exists='append', index=False)
+df3.to_sql('104_for_AdminAsst', con=mysql__engine, if_exists='append', index=False)
 
 mysql__engine.dispose()  ## disconnect from mysql
 
