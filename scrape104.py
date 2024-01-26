@@ -118,7 +118,7 @@ df3 = pd.DataFrame(values,columns = columns_name )
 df3.drop_duplicates(inplace=True)  #刪除重覆資料
 
 
-df3.to_sql('104_for_AdminAsst', con=mysql__engine, if_exists='append', index=False)
+df3.to_sql('104_for_AdminAsst', con=mysql__engine, if_exists='append', index=False)  #存至 local DB
 
 mysql__engine.dispose()  ## disconnect from mysql
 
