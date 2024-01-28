@@ -1,0 +1,53 @@
+@startuml
+
+!define RECTANGLE_CLASS class
+!define RECTANGLE_OBJECT object
+
+skinparam sequence {
+  ArrowColor DeepSkyBlue
+  LifeLineBorderColor DeepSkyBlue
+  LifeLineBackgroundColor LightSkyBlue
+  ParticipantBorderColor DeepSkyBlue
+}
+
+participant "User" as User
+participant "save_area_for_Taiwan()" as Function1
+participant "get_areaNo()" as Function2
+database "area_job104.json" as JsonFile
+database "area.txt" as CsvFile
+
+User -> Function1: Request to Save Area for Taiwan
+activate User
+
+Function1 -> JsonFile: Read area_job104.json
+activate Function1
+activate JsonFile
+
+JsonFile -> Function1: Parse JSON data
+Function1 --> JsonFile: Extract Taiwan area info
+JsonFile --> Function1: Extracted data
+
+Function1 -> CsvFile: Save to area.txt
+CsvFile <-- Function1: Success
+deactivate JsonFile
+deactivate Function1
+
+User -> Function2: Request to Get Area Numbers
+activate Function2
+
+Function2 -> CsvFile: Read area.txt
+activate CsvFile
+
+CsvFile --> Function2: Data Loaded
+
+alt Data Available
+  Function2 -> User: Yield Area Numbers
+else Data Unavailable
+  Function2 --> User: No Data Available
+end
+
+deactivate CsvFile
+deactivate Function2
+deactivate User
+
+@enduml

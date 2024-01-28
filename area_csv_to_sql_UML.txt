@@ -1,0 +1,33 @@
+@startuml
+
+!define RECTANGLE_CLASS class
+!define RECTANGLE_OBJECT object
+
+skinparam sequence {
+  ArrowColor DeepSkyBlue
+  LifeLineBorderColor DeepSkyBlue
+  LifeLineBackgroundColor LightSkyBlue
+  ParticipantBorderColor DeepSkyBlue
+}
+
+participant "Pandas" as Pandas
+participant "MySQL Database" as MySQLDB
+database "area.txt" as CsvFile
+
+Pandas -> CsvFile: Read CSV File
+activate Pandas
+activate CsvFile
+CsvFile --> Pandas: Data Loaded
+
+Pandas -> Pandas: Rename Columns
+Pandas --> Pandas: Columns Renamed
+
+Pandas -> MySQLDB: Store Data in MySQL
+activate MySQLDB
+MySQLDB --> Pandas: Data Stored in MySQL
+deactivate MySQLDB
+
+deactivate Pandas
+deactivate CsvFile
+
+@enduml

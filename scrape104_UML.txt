@@ -1,0 +1,70 @@
+@startuml
+
+!define RECTANGLE_CLASS class
+!define RECTANGLE_OBJECT object
+
+skinparam sequence {
+  ArrowColor DeepSkyBlue
+  LifeLineBorderColor DeepSkyBlue
+  LifeLineBackgroundColor LightSkyBlue
+  ParticipantBorderColor DeepSkyBlue
+}
+
+participant "User" as User
+participant "MySQL Database" as MySQLDB
+participant "104 Job Search Website" as JobSearchWebsite
+participant "BeautifulSoup" as BeautifulSoup
+participant "Pandas" as Pandas
+participant "JSON File" as JsonFile
+participant "MySQL Engine" as SqlAlchemy
+
+User -> JsonFile: Load MySQL Login Information
+activate User
+activate JsonFile
+JsonFile --> User: MySQL Login Info
+
+User -> SqlAlchemy: Create MySQL Engine
+activate SqlAlchemy
+SqlAlchemy --> User: MySQL Engine Created
+
+User -> JsonFile: Load Area Information
+JsonFile --> User: Area Information Loaded
+
+User -> JobSearchWebsite: Iterate through Areas in Taiwan
+activate JobSearchWebsite
+
+loop For Each Area
+    JobSearchWebsite -> JobSearchWebsite: Construct URL for Job Search
+    JobSearchWebsite -> JobSearchWebsite: Send Request to 104 Website
+    JobSearchWebsite --> JobSearchWebsite: Retrieve HTML Content
+    
+    JobSearchWebsite -> BeautifulSoup: Parse HTML Content
+    activate BeautifulSoup
+    BeautifulSoup --> JobSearchWebsite: Parsed Content
+
+    JobSearchWebsite -> Pandas: Create DataFrame
+    activate Pandas
+    Pandas --> JobSearchWebsite: DataFrame Created
+
+    loop For Each Job
+        JobSearchWebsite -> Pandas: Append Job Details to DataFrame
+        Pandas --> JobSearchWebsite: Details Appended
+    end
+
+    JobSearchWebsite -> MySQLDB: Store Job Information in MySQL
+    activate MySQLDB
+    MySQLDB --> JobSearchWebsite: Data Stored in MySQL
+    deactivate MySQLDB
+
+    deactivate Pandas
+    deactivate BeautifulSoup
+end
+
+JobSearchWebsite --> User: Job Information Processed
+deactivate JobSearchWebsite
+
+User -> SqlAlchemy: Dispose MySQL Engine
+SqlAlchemy --> User: MySQL Engine Disposed
+deactivate SqlAlchemy
+
+@enduml
